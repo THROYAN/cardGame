@@ -2,3 +2,8 @@
 #_internal:
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
 #   prefix:   /_internal
+
+_cardgamedemo_app_default:
+    resourse: "@CardGameDemoBundleController/DefaultController.php"
+    type:     annotation
+

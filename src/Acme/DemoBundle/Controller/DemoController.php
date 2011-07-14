@@ -12,6 +12,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DemoController extends Controller
 {
+    public function fancyAction($name, $color)
+    {
+        $object = '<div color=' + $color + '></div>';
+        return $this->render('AcmeDemoBundle:Demo:fancy.html.twig', array(
+                'name' => $name,
+                'object' => $object
+            ));
+    }
     /**
      * @Route("/", name="_demo")
      * @Template()
