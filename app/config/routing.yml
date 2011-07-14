@@ -4,6 +4,6 @@
 #   prefix:   /_internal
 
 _cardgamedemo_app_default:
-    resourse: "@CardGameDemoBundleController/DefaultController.php"
+    resource: "@CardGameDemoGameBundle/Controller/DefaultController.php"
     type:     annotation
 

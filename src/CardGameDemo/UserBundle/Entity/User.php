@@ -20,7 +20,8 @@ class User
      * 
      * @var int
      * @ORM\Id
-     * @ORM\Column(type="integer", unique="true", autoincrement="true")
+     * @ORM\Column(type="integer", unique="true")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
     /**
@@ -35,8 +36,7 @@ class User
      * User Name
      * 
      * @var string
-     * @ORM\Name
-     * @ORM\Column(type="varchar(32)", unique="true")
+     * @ORM\Column(type="string", length=32, unique="true")
      */
     private $name;
     
@@ -44,8 +44,7 @@ class User
      * User Password
      * 
      * @var string
-     * @ORM\Pass
-     * @ORM\Column(type="varchar(256))
+     * @ORM\Column(type="string", length=256)
      */
     private $password;
 
@@ -125,5 +124,25 @@ class User
     public function getName()
     {
         return $this->name;
+    }
+    
+    /**
+     * Set Password
+     * 
+     * @param string $pass
+     */
+    public function setPassword($pass)
+    {
+        $this->password = $pass;
+    }
+    
+    /**
+     * Get Password
+     * 
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 }
