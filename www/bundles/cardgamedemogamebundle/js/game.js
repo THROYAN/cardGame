@@ -1,30 +1,47 @@
-var animTime = 1000, nextCardSpeed = 10;
+var animTime = 500, nextCardSpeed = 100, angleStep = 5;
+var banedValues = [2,3,4,5,6];
+var banedSuites;
+var cardsCount = 52;
+var x = 20, dx = 50;
+var y = 50, dy = 50;
+var oneRow = 8;
 
 $(function(){
+    
+    cardsCount -= banedValues.length * 4;
     $('#gameTable').append('<H>Click me!!! ;)</H>')
     var cards = [];
-    for (var i = 0; i < 52; i++) {
-        cards[i] = new Card(i, null, $('#gameTable'));
+    for (var i = 0; i < cardsCount; i++) {
+        
+        //select a random card
+        var r;
+        do
+        {
+            r = randomInt(52);
+            temp = new Card(r);
+        }
+        while(temp.$().length > 0 || jQuery.inArray(temp.value.number(), banedValues) != -1);
+        
+        cards[i] = new Card(r, null, $('#gameTable'));
         cards[i].imgWidth(40);
-        cards[i].imgHeight(60);
-        cards[i].x(280);
-        cards[i].y(450);
+        cards[i].imgHeight(55);
+        cards[i].x(x);
+        cards[i].y(y + dy * (oneRow + 1));
         cards[i].hide();
     }
     
-    var oneRow = 4;
     var temp = true;
     var show = function(){
         var i = 0;
         var t = setInterval(function(){
             if(temp)
-                cards[i].animatedFly(100 * (i % oneRow), 50, true);
+                cards[i].animatedFly(x + dx * (i % oneRow), y, true, 0, animTime, angleStep);
             else
-                cards[i].animatedFly(100 * (oneRow - 1 - (i % oneRow)), 50, true);
+                cards[i].animatedFly(x + dx * (oneRow), y + dy * (i % oneRow + 2), true, 90, animTime, angleStep);
             i++;
             if(i % oneRow == 0)
                 temp = !temp;
-            if(i >= 52)
+            if(i >= cardsCount)
             {
                 clearInterval(t);
                 $('#gameTable h').html('Click me again ;)))');
@@ -34,3 +51,13 @@ $(function(){
     
     $('#gameTable').click(show);
 });
+
+/**
+ * End is excluded
+ */
+function randomInt(a, b)
+{
+    if(b == null)
+        return Math.floor(Math.random()*a);
+    return Math.floor(Math.random()*(b - a)) + a;
+}
