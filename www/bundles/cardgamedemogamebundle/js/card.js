@@ -382,7 +382,7 @@ function Card(value, suit, container){
                         if(show || show == null)
                             c.show();
                     }
-                },animTime / 100);
+                },animTime / 200);
             }
         });
     }

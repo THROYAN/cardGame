@@ -1,4 +1,4 @@
-var animTime = 1000, nextCardSpeed = 100;
+var animTime = 1000, nextCardSpeed = 10;
 
 $(function(){
     $('#gameTable').append('<H>Click me!!! ;)</H>')
@@ -11,18 +11,25 @@ $(function(){
         cards[i].y(450);
         cards[i].hide();
     }
+    
+    var oneRow = 4;
+    var temp = true;
     var show = function(){
         var i = 0;
         var t = setInterval(function(){
-            
-            cards[i].animatedFly(100 * (i % 4), 50, true);
+            if(temp)
+                cards[i].animatedFly(100 * (i % oneRow), 50, true);
+            else
+                cards[i].animatedFly(100 * (oneRow - 1 - (i % oneRow)), 50, true);
             i++;
+            if(i % oneRow == 0)
+                temp = !temp;
             if(i >= 52)
             {
                 clearInterval(t);
                 $('#gameTable h').html('Click me again ;)))');
             }
-        },100);
+        },nextCardSpeed);
     }
     
     $('#gameTable').click(show);
