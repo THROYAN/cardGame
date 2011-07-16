@@ -13,7 +13,8 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 class appprodUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerator
 {
     static private $declaredRouteNames = array(
-
+       '_cgdemo_enteruser' => true,
+       '_cgdemo_indexpage' => true,
     );
 
     /**
@@ -37,4 +38,13 @@ class appprodUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerat
         return $this->doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $absolute);
     }
 
+    private function get_cgdemo_enteruserRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'CardGameDemo\\GameBundle\\Controller\\DefaultController::enterAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/app/enter',  ),));
+    }
+
+    private function get_cgdemo_indexpageRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'CardGameDemo\\GameBundle\\Controller\\DefaultController::indexAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/app/',  ),));
+    }
 }
