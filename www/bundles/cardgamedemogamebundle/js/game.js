@@ -2,9 +2,9 @@ var animTime = 500, nextCardSpeed = 100, angleStep = 5;
 var banedValues = [2,3,4,5,6];
 var banedSuites;
 var cardsCount = 52;
-var x = 20, dx = 50;
-var y = 50, dy = 50;
-var oneRow = 8;
+var x = 20, dx = 20;
+var y = 50, dy = 20;
+var oneRow = 16;
 
 $(function(){
     
