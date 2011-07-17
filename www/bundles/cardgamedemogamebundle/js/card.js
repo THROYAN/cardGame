@@ -1,4 +1,4 @@
-function Card(value, suit, container){
+function Card(value, suit, container, cssClass){
 /**
  * <private variables>:
  */
@@ -9,11 +9,12 @@ function Card(value, suit, container){
     var img;
     var angle = 0;
     var hidden = false;
+    var _id = '';
     
 /**
  * <constructors>:
  */
-    function myConstructor(object,value,suit,container)
+    function myConstructor(object,value,suit,container, cssClass)
     {
         // new Card()
         if(value == null)
@@ -32,17 +33,12 @@ function Card(value, suit, container){
         {
             container.append(object.tag());
             var jqObject = object.$();
+            if(cssClass)
+            {
+                jqObject.addClass(cssClass);
+            }
             jqObject.css('position','absolute');
-            jqObject.draggable({
-                start: function(event,ui)
-                {
-                    $(this).css('border','solid 2px #0f0');
-                },
-                stop: function(event,ui)
-                {
-                    $(this).css('border','none')
-                }
-            });
+            jqObject.draggable();
             canvas = object.element();
             context = canvas.getContext("2d");
             img = object.getImage();
@@ -179,7 +175,7 @@ function Card(value, suit, container){
         else
         //set
         {
-            this.$().css('left',value);
+            this.$().css('left',value + 'px');
         }
     }
     
@@ -192,7 +188,7 @@ function Card(value, suit, container){
         else
         //set
         {
-            this.$().css('top',value);
+            this.$().css('top',value + 'px');
         }
     }
     
@@ -232,7 +228,25 @@ function Card(value, suit, container){
         //set
         {
             angle = (value % 360 + 360) % 360;
-            this.refresh();
+        }
+    }
+    
+    this.scale = 1;
+    
+    this.cssClass = "card";
+    
+    this.id = function(value){
+        if(value == null)
+        //get
+        {
+            return _id;
+        }
+        else
+        //set
+        {
+            var temp = this.$();
+            _id = value;
+            temp.attr('id', this.generateId());
         }
     }
     
@@ -269,7 +283,7 @@ function Card(value, suit, container){
      */
     this.generateId = function()
     {
-        return this.value.name() + this.suit.name();
+        return this.id() + '-' + this.value.name() + this.suit.name();
     }
 
     /**
@@ -279,7 +293,7 @@ function Card(value, suit, container){
      */
     this.tag = function()
     {
-        return '<canvas id="' + this.generateId() + '"></canvas>';
+        return '<canvas id="' + this.generateId() + '" class="' + this.cssClass + '"></canvas>';
     }
 
     /**
@@ -336,9 +350,10 @@ function Card(value, suit, container){
             var h = this.imgHeight(),w = this.imgWidth(), a = this.angle() * Math.PI / 180;
             var g = Math.sqrt(Math.pow(h, 2) + Math.pow(w, 2));
             canvas.width = w = 
-                canvas.height = h = g;
-            context.translate(w/2,h/2);
+                canvas.height = h = g * this.scale;
+            context.translate(w/2, h/2);
             context.rotate(a);
+            context.scale(this.scale, this.scale);
             
             context.drawImage(img, -this.imgWidth()/2,-this.imgHeight()/2, this.imgWidth(), this.imgHeight());
         }
@@ -348,7 +363,7 @@ function Card(value, suit, container){
         }
     }
     
-    this.animatedFly = function(x,y,show,toAngle,animTime,angleStep)
+    this.animatedFly = function(x,y,show,toAngle,animTime,angleStep,endSpeed)
     {
         if(typeof(toAngle) != 'number')
             toAngle = 0;
@@ -368,24 +383,42 @@ function Card(value, suit, container){
             step : function()
             {
                 c.angle(c.angle() + angleStep);
+                c.refresh();
             },
             easing: '',
             complete: function()
             {
-                var eps = 4;
+                var eps = angleStep;
                 var t = setInterval(function(){
                     c.angle(c.angle() + angleStep);
-                    if(Math.abs(c.angle() - toAngle) < eps || Math.abs(c.angle() - (toAngle + 180) % 360) < eps)
+                    c.refresh();
+                    if(toAngle == 0 || Math.abs(c.angle() - toAngle) <= eps || Math.abs(c.angle() - (toAngle + 180) % 360) <= eps)
                     {
                         c.angle(toAngle);
+                        c.refresh();
                         clearInterval(t);
-                        if(show || show == null)
-                            c.show();
+                        if(show != null)
+                        {
+                            switch(show)
+                            {
+                                case 'show':
+                                case true:
+                                    c.show();
+                                    break;
+                                case 'hide':
+                                case false:
+                                    c.hide();
+                                    break;
+                                case 'toggle':
+                                    c.toggle();
+                                    break;
+                            }
+                        }
                     }
-                },animTime / 200);
+                },endSpeed != null ? endSpeed : animTime / 200);
             }
         });
     }
        
-    myConstructor(this, value, suit, container);
+    myConstructor(this, value, suit, container, cssClass);
 }
